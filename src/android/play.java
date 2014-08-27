@@ -3,6 +3,9 @@ package org.ihopkc.videoplayer;
 //change this (com.phonegap.helloworld) to your package name, keep the .R
 //example: your.package.name.R;
 import com.phonegap.helloworld.R;
+
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,11 +13,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
+
+
+
+
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,8 +34,9 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
-import android.widget.VideoView;
 import android.widget.Toast;
+import android.widget.VideoView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,205 +48,195 @@ import org.json.JSONObject;
  * @see SystemUiHider
  */
 public class play extends Activity {
-	VideoView videoView;
-	VideoView adVideoView;
-	ImageView imageView;
-	ImageButton imageButton;
-	String defaultBannerLink = "https://www.ihopkc.org/give";
-	String mainVideoUrl = "";
-	String AdVideoUrl = "";
-	int position = 0;
-	boolean isAd = false;
-	int nextAdTime = 0;
-	MediaController mediaController;
-	boolean showAds = true;
-	boolean isLive = false;
-	int playCount = 0;
-	 public void onCreate(Bundle savedInstanceState) {
-	        super.onCreate(savedInstanceState);
-	        setContentView(R.layout.activity_player);
-	        Bundle bundle = getIntent().getExtras();
-	        String url = bundle.getString("url");
-	        showAds = bundle.getBoolean("showAds");
-			isLive =  bundle.getBoolean("isLive");
-	        makePlayer(url);
-	    }
-	private void makePlayer(String URL){
-		
-		
-		mainVideoUrl = URL;
-		//end here
-		
-		
-    	videoView = (VideoView) findViewById(R.id.videoView);
-    	adVideoView = (VideoView) findViewById(R.id.adVideoView);
-    	
-        videoView.setVideoURI(Uri.parse(mainVideoUrl));  
-        final MediaController mediaController = new MediaController(this);
-      	videoView.setMediaController(mediaController);
-    	adVideoView.setMediaController(null);
-      	videoView.requestFocus();
+  VideoView videoView;
+  ImageView imageView;
+  ImageButton imageButton;
+  String defaultBannerLink = "https://www.ihopkc.org/give";
+  String mainVideoUrl = "";
+  String AdVideoUrl = "";
+  int position = 0;
+  boolean isAd = false;
+  int nextAdTime = 0;
+  MediaController mediaController;
+  boolean showAds = true;
+  boolean isLive = true;
+  int playCount = 0;
+   public void onCreate(Bundle savedInstanceState) {
+    
+          super.onCreate(savedInstanceState);
         
-        if(position > 0){
-        	videoView.seekTo(position);
-        }
+          setContentView(R.layout.activity_player);
+          Bundle bundle = getIntent().getExtras();
+          String url = bundle.getString("url");
+          showAds = bundle.getBoolean("showAds");
+      isLive =  false;
+          makePlayer(url);
+      }
+  private void makePlayer(String URL){
+    
+    
+    mainVideoUrl = URL;
+    //end here
+      videoView = (VideoView) findViewById(R.id.videoView);
+        videoView.setVideoURI(Uri.parse(mainVideoUrl));  
+        mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+      
+        videoView.requestFocus();
+        
+
         
         if(showAds){
-        	updateAd();
-        	
+          updateAd();
+          
         }
         else{
-        	ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-        	progressBar.setVisibility(View.VISIBLE);
-        	imageView = (ImageView)findViewById(R.id.imageButton1);
-        	imageView.setVisibility(View.GONE);
-        	videoView.start();
+          ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+          progressBar.setVisibility(View.VISIBLE);
+          imageView = (ImageView)findViewById(R.id.imageButton1);
+          imageView.setVisibility(View.GONE);
+          videoView.start();
         }
+    
+        videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
-        adVideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-
-   	        @Override
-   	        public void onCompletion(MediaPlayer mp) {
-   	        	ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-	        	progressBar.setVisibility(View.VISIBLE);
-   	         if(showAds){
-   	        		
-   	        		videoView.setVisibility(View.VISIBLE);
-   	        		adVideoView.setVisibility(View.GONE);
-   	        		videoView.seekTo(position);
-   	        		videoView.start();
-	   	        	imageView = (ImageView)findViewById(R.id.imageButton1);
-	   	        	imageView.setVisibility(View.VISIBLE);
-	   	        	
-	   	     	
-   	         }
-   	        }	
-   	    });
-   	 	
-   	 	
-   	 videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+              if(!isAd){
+                return;
+              }
+              ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+            progressBar.setVisibility(View.VISIBLE);
+            
+          if(showAds){
+              isAd = false;
+                videoView.setMediaController(mediaController);
+                videoView.setVideoURI(Uri.parse(mainVideoUrl));  
+                videoView.seekTo(position);
+                videoView.start();
+                imageView = (ImageView)findViewById(R.id.imageButton1);
+                imageView.setVisibility(View.VISIBLE);
+             
+                if(nextAdTime > 0){
+                   final Handler handler = new Handler();
+                   handler.postDelayed(new Runnable() {
+                       @Override
+                       public void run() {
+                       updateAd();
+                       }
+                     }, nextAdTime); 
+              }
+            
+             }
+            } 
+        });
+      
+      
+     videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
 
          @Override
          public void onPrepared(MediaPlayer mp) {
-        	 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-         	 progressBar.setVisibility(View.GONE);
-         	 
-         	if(nextAdTime > 0){
-  		    	 final Handler handler = new Handler();
-  		    	 handler.postDelayed(new Runnable() {
-  		  	       @Override
-  		  	       public void run() {
-  		  	    	 updateAd();
-  		  	       }
-  		  	     }, nextAdTime); 
-	   		}
-         	
+           ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+           progressBar.setVisibility(View.GONE);
+         
+          
          }
      });
-	 adVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-
-         @Override
-         public void onPrepared(MediaPlayer mp) {
-        	 ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-         	 progressBar.setVisibility(View.GONE);
-         	}
-	     });
+  
         
-	}
+  }
 
 
     
-    public void updateAd(){
+    public void updateAd(){ 
+
        //dose a rest call to get a ad
        //then runs doData on success
-       if(playCount == 0 || videoView.isPlaying()){
-    	  
-    	   getdata();  
+       if(playCount == 0 || videoView.isPlaying() && !isAd){
+         getdata();  
        }
        else{
-    	   final Handler handler = new Handler();
-    	   handler.postDelayed(new Runnable() {
-		  	       @Override
-		  	       public void run() {
-		  	    	 updateAd();
-		  	       }
-		  	     }, 1000);
+         final Handler handler = new Handler();
+         handler.postDelayed(new Runnable() {
+               @Override
+               public void run() {
+               updateAd();
+               }
+             }, 1000);
        }
        
     }
 
     //modify the banner onclick and image
     public  void doData(String jsonStr){
-    	
-    	 
-    	 String overlayImage = "";
+      
+       
+       String overlayImage = "";
+         position = videoView.getCurrentPosition();
+       try {
+         //parse the json to get some needed vars
+      JSONObject jObject = new JSONObject(jsonStr);
+      JSONObject settings = jObject.getJSONObject("settings");
+      nextAdTime = settings.getInt("nextAdTime");
+      
+      JSONObject ad = jObject.getJSONObject("ad");
+      JSONObject overlay = ad.getJSONObject("overlay");
+      
+      overlayImage = overlay.getString("image");
+      AdVideoUrl = ad.getString("video");
+      defaultBannerLink  = overlay.getString("link");
+      
+      isAd = true;
+      
+      if( (playCount == 0) || !isLive){
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
+          progressBar.setVisibility(View.VISIBLE);
+          
+          imageView = (ImageView)findViewById(R.id.imageButton1);
+          imageView.setVisibility(View.GONE);
+          videoView.setMediaController(null);
+          videoView.setVideoURI(Uri.parse(AdVideoUrl)); 
+        videoView.start();  
+      }
+      playCount++;
+      
+      
+            
+    } catch (JSONException e) {
+    
+    }
+       
+       // Create an object for subclass of AsyncTask
+       GetXMLTask task = new GetXMLTask();
+       // Execute the task
+       
+       task.execute(new String[] { overlayImage });
+       
+       imageView = (ImageView)findViewById(R.id.imageButton1);
 
-    	 try {
-    		 //parse the json to get some needed vars
-			JSONObject jObject = new JSONObject(jsonStr);
-			JSONObject settings = jObject.getJSONObject("settings");
-			nextAdTime = settings.getInt("nextAdTime");
-			
-			JSONObject ad = jObject.getJSONObject("ad");
-			JSONObject overlay = ad.getJSONObject("overlay");
-			
-			overlayImage = overlay.getString("image");
-			AdVideoUrl = ad.getString("video");
-			defaultBannerLink  = overlay.getString("link");
-			
-			isAd = true;
-			 position = videoView.getCurrentPosition(); 
-			if( (playCount == 0) || !isLive){
-				ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar1);
-		    	progressBar.setVisibility(View.VISIBLE);
-		    	
-		    	imageView = (ImageView)findViewById(R.id.imageButton1);
-		    	imageView.setVisibility(View.GONE);
-		    	videoView.pause();
-		    	adVideoView.setVisibility(View.VISIBLE);
-		    	videoView.setVisibility(View.GONE);
-		 	    adVideoView.setVideoURI(Uri.parse(AdVideoUrl)); 
-		 	    adVideoView.start();	
-			}
-			playCount++;
-			
-			
-	 	    	  
-		} catch (JSONException e) {
-		
-		}
-    	 
-    	 // Create an object for subclass of AsyncTask
-	     GetXMLTask task = new GetXMLTask();
-	     // Execute the task
-	     
-	     task.execute(new String[] { overlayImage });
-	     
-	     imageView = (ImageView)findViewById(R.id.imageButton1);
-
-	    
-	     //overlay click listner
-	     imageView.setOnClickListener(new OnClickListener() {
-	    	    public void onClick(View v) {
-	    	    	Uri clickUrl = Uri.parse(defaultBannerLink);
-	    	    	Intent launchBrowser = new Intent(Intent.ACTION_VIEW, clickUrl);
-	    	    	startActivity(launchBrowser);
-	    	    }
-	    });
+      
+       //overlay click listner
+       imageView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+              Uri clickUrl = Uri.parse(defaultBannerLink);
+              Intent launchBrowser = new Intent(Intent.ACTION_VIEW, clickUrl);
+              startActivity(launchBrowser);
+            }
+      });
 
     
-	     
-	     
-	    //update ad after timeout
-	 	if(isLive && playCount > 1 && nextAdTime > 0){
-		    	 final Handler handler = new Handler();
-		    	 handler.postDelayed(new Runnable() {
-		  	       @Override
-		  	       public void run() {
-		  	    	 updateAd();
-		  	       }
-		  	     }, nextAdTime); 
-  		}
+       
+       
+      //update ad after timeout
+    if(isLive && playCount > 1 && nextAdTime > 0){
+           final Handler handler = new Handler();
+           handler.postDelayed(new Runnable() {
+               @Override
+               public void run() {
+               updateAd();
+               }
+             }, nextAdTime); 
+      }
     }
 
     //load ad overlay
