@@ -122,10 +122,10 @@ import io.vov.vitamio.widget.VideoView;```
 
 
 add the fallowing code to onCreate function right after "super.onCreate(savedInstanceState);"
- ```sh  
- if (!LibsChecker.checkVitamioLibs(this))
-				return;
- ```
+```sh  
+if (!LibsChecker.checkVitamioLibs(this))
+	return;
+```
  
  change global var position type form   ```int``` to  ```long ```
 
@@ -135,8 +135,7 @@ Switch Android's video view to Vitamio's video view
 
 Edit: "Phonegap Project"/res/layout/activity_player.xml 
 
-change the ```<VideoView>``` tag to
-```<io.vov.vitamio.widget.VideoView>``` 
+change the ```<VideoView>``` tag to ```<io.vov.vitamio.widget.VideoView>``` 
 
 5. (Optional)
 ---
