@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+           id="org.ihopkc.videoplayer"
+      version="0.1.0">
+    <name>Android Video Player with Ads</name>
+    <description>Phone gap plugin to open android video player to play content instead of html video tags</description>
+    <license>MIT</license>
+    <keywords>phonegap,videoPlayer</keywords>
+
+
+    <js-module src="www/videoplayer.js" name="videoplayer">
+        <clobbers  target="window.androidPlay" />
+    </js-module>
+
+    <!-- android -->
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            
+            <feature name="videoplugin">
+                <param name="android-package" value="org.ihopkc.videoplayer.videoplugin"/>
+            </feature>
+            
+
+        </config-file>
+ 
+         <config-file target="AndroidManifest.xml" parent="/manifest/application">
+                  <activity android:configChanges="orientation|keyboardHidden|screenSize" android:name="org.ihopkc.videoplayer.play" android:screenOrientation="landscape" android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+                   </activity>
+        </config-file>
+
+        <source-file src="src/android/play.java" target-dir="src/org/ihopkc/videoplayer" />
+        <source-file src="src/android/videoplugin.java" target-dir="src/org/ihopkc/videoplayer" />
+        <source-file src="src/android/activity_player.xml" target-dir="res/layout" />       
+     </platform>          
+</plugin>
