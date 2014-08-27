@@ -46,5 +46,23 @@ Usage
 ---
 To open the video in android's video view run this javascript function
 ```sh 
- window.play('http://link/to/android/supported/video.mp4');
+ var showAds = true;  //or false
+ var isLive  = false; //or true
+ window.androidPlay('http://link/to/android/supported/video.mp4', showAds, isLive);
 ```
+ Ad server example :
+ ```sh 
+{
+    settings: {
+        nextAdTime: 30000 //ms till next ad will play
+    },
+    ad: {
+        overlay: {
+            image: "banner image url",
+            link: "on click url"
+        },
+    video: "video url"
+    }
+}
+ ```
+---find and change "http://mars.ihopkc.org/vast/live.php" in play.java to your url
