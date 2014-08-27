@@ -140,7 +140,9 @@ change the ```<VideoView>``` tag to ```<io.vov.vitamio.widget.VideoView>```
 
 5. (Optional)
 ---
- remove file name from player
+remove file name from player
+
 Edit: InitActivity/res/layout/medaiconroller.xml
-	find last ```sh <TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
+
+find last ```<TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
 
