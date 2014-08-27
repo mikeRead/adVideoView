@@ -66,3 +66,83 @@ To open the video in android's video view run this javascript function
 }
  ```
 ---find and change "http://mars.ihopkc.org/vast/live.php" in play.java to your url
+
+
+
+----------------------------------------------------------
+How to use with vitamio libs and Eclipse IDE
+---
+Warnings
+---
+phonegap will not comple after doing the steps below and you must manually complie with eclipse or another ide
+1.
+---
+import the vitamio folder as an android project
+
+to set vitamio lib in phonegap project:
+
+```right click on phonegap project (in package explorer) -> properties -> Android -> click Add -> Click Inint Activity -> OK -> OK```
+
+2.
+---
+Add permissions and vitamio activity
+
+Edit: "Phonegap Project"/AndroidMainifest.xml
+
+add needed permissons
+
+```sh
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> 
+```	
+
+add  vitamio init activity
+```sh 
+<activity android:name="io.vov.vitamio.activity.InitActivity"
+    android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
+    android:launchMode="singleTop"
+    android:theme="@android:style/Theme.NoTitleBar"
+    android:windowSoftInputMode="stateAlwaysHidden" />
+```
+
+3.
+---
+Switch Android's Player libs with vitamio's libs
+
+Edit: "Phonegap Project"/src/org.ihopkc.videoview/play.java
+
+remove android's imports for Meida Player, Media Controller, VideoView and Add imports below
+```
+import io.vov.vitamio.LibsChecker;
+import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.widget.MediaController;
+import io.vov.vitamio.widget.VideoView;```
+
+
+add the fallowing code to onCreate function right after "super.onCreate(savedInstanceState);"
+ ```sh  
+ if (!LibsChecker.checkVitamioLibs(this))
+				return;
+ ```
+ 
+ change global var position type form   ```int``` to  ```long ```
+
+4.
+---
+Switch Android's video view to Vitamio's video view
+
+Edit: "Phonegap Project"/res/layout/activity_player.xml 
+
+change the ```<VideoView>``` tag to
+```<io.vov.vitamio.widget.VideoView>``` 
+
+5. (Optional)
+---
+ remove file name from player
+Edit: InitActivity/res/layout/medaiconroller.xml
+	find last <TextView> with android:id="@+id/mediacontroller_file_name" attribute and add the attrubute 
+	
+	android:visibility="gone"
+
