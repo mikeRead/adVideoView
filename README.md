@@ -128,7 +128,7 @@ if (!LibsChecker.checkVitamioLibs(this))
     return;
 ```
  
- change global var position type form   ```int``` to  ```long ```
+ change global var ```position``` type form  ```int``` to  ```long ```
 
 4.
 ---
@@ -142,5 +142,5 @@ change the ```<VideoView>``` tag to ```<io.vov.vitamio.widget.VideoView>```
 ---
  remove file name from player
 Edit: InitActivity/res/layout/medaiconroller.xml
-	find last ```sh <TextView>``` with ```sh android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
+	find last ```sh <TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
 
