@@ -122,7 +122,7 @@ import io.vov.vitamio.widget.VideoView;```
 
 
 add the fallowing code to onCreate function right after "super.onCreate(savedInstanceState);"
-```sh  
+``` 
 if (!LibsChecker.checkVitamioLibs(this))
 	return;
 ```
@@ -141,7 +141,5 @@ change the ```<VideoView>``` tag to ```<io.vov.vitamio.widget.VideoView>```
 ---
  remove file name from player
 Edit: InitActivity/res/layout/medaiconroller.xml
-	find last <TextView> with android:id="@+id/mediacontroller_file_name" attribute and add the attrubute 
-	
-	android:visibility="gone"
+	find last ```<TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
 
