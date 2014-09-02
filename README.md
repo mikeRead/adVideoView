@@ -46,9 +46,10 @@ Usage
 ---
 To open the video in android's video view run this javascript function
 ```sh 
- var showAds = true;  //or false
- var isLive  = false; //or true
- window.androidPlay('http://link/to/android/supported/video.mp4', showAds, isLive);
+ var showAds = true;  //or false;
+ var isLive  = false; //or true;
+ var adServer = "http://mars.ihopkc.org/vast/live.php"; //optinal
+ window.androidPlay('http://link/to/android/supported/video.mp4', showAds, isLive, adServer);
 ```
  Ad server example :
  ```sh 
@@ -99,7 +100,7 @@ add needed permissons
 ```	
 
 add  vitamio init activity
-```sh
+```sh 
 <activity android:name="io.vov.vitamio.activity.InitActivity"
     android:configChanges="orientation|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
     android:launchMode="singleTop"
@@ -114,21 +115,20 @@ Switch Android's Player libs with vitamio's libs
 Edit: "Phonegap Project"/src/org.ihopkc.videoview/play.java
 
 remove android's imports for Meida Player, Media Controller, VideoView and Add imports below
-```sh 
+```
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;
-```
+import io.vov.vitamio.widget.VideoView;```
 
 
 add the fallowing code to onCreate function right after "super.onCreate(savedInstanceState);"
-```sh
+``` 
 if (!LibsChecker.checkVitamioLibs(this))
-    return;
+	return;
 ```
  
- change global var ```position``` type form  ```int``` to  ```long ```
+ change global var position type form   ```int``` to  ```long ```
 
 4.
 ---
@@ -140,9 +140,7 @@ change the ```<VideoView>``` tag to ```<io.vov.vitamio.widget.VideoView>```
 
 5. (Optional)
 ---
-remove file name from player
-
+ remove file name from player
 Edit: InitActivity/res/layout/medaiconroller.xml
-
-find last ```<TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
+	find last ```<TextView>``` with ```android:id="@+id/mediacontroller_file_name"``` attribute and add the attrubute ```android:visibility="gone"```
 
