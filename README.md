@@ -115,15 +115,16 @@ Switch Android's Player libs with vitamio's libs
 Edit: "Phonegap Project"/src/org.ihopkc.videoview/play.java
 
 remove android's imports for Meida Player, Media Controller, VideoView and Add imports below
-```
+```sh 
 import io.vov.vitamio.LibsChecker;
 import io.vov.vitamio.MediaPlayer;
 import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;```
+import io.vov.vitamio.widget.VideoView;
+```
 
 
 add the fallowing code to onCreate function right after "super.onCreate(savedInstanceState);"
-``` 
+```sh 
 if (!LibsChecker.checkVitamioLibs(this))
 	return;
 ```
