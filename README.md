@@ -49,7 +49,7 @@ To open the video in android's video view run this javascript function
  var showAds = true;  //or false;
  var isLive  = false; //or true;
  var adServer = "http://mars.ihopkc.org/vast/live.php"; //optinal
- window.androidPlay('http://link/to/android/supported/video.mp4', showAds, isLive, adServer);
+ window.androidPlay('http://link/to/android/supported/video.mp4', showAds, isLive [,adServer] );
 ```
  Ad server example :
  ```sh 
@@ -66,7 +66,7 @@ To open the video in android's video view run this javascript function
     }
 }
  ```
----find and change "http://mars.ihopkc.org/vast/live.php" in play.java to your url
+
 
 
 
