@@ -55,7 +55,8 @@ To open the video in android's video view run this javascript function
  ```sh 
 {
     settings: {
-        nextAdTime: 30000 //ms till next ad will play
+        nextAdTime: 30000, //ms til next ad will play
+        adSkipTime: 10000  //ms til user can skip ad 
     },
     ad: {
         overlay: {
