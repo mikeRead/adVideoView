@@ -17,7 +17,9 @@ public class videoplugin extends CordovaPlugin {
         if (action.equals("play")) {
             final String url= args.getString(0);  
             final boolean showAds= args.getBoolean(1); 
-            final boolean isLive= args.getBoolean(2);  
+            final boolean isLive= args.getBoolean(2);
+            final String adServer = args.getString(3);
+            
             cordova.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -26,7 +28,7 @@ public class videoplugin extends CordovaPlugin {
                         intent.putExtra("url", url);
                         intent.putExtra("showAds", showAds);
                         intent.putExtra("isLive", isLive);
-                        
+                        intent.putExtra("adServer", adServer);
                         cordova.getActivity().startActivity(intent);
                     }
                 });
@@ -35,8 +37,5 @@ public class videoplugin extends CordovaPlugin {
         }
         return false;
     }
-
-   
-    
-    
+ 
 }
